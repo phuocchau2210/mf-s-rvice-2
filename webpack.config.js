@@ -1,7 +1,10 @@
 const path = require("path");
+const webpack = require("webpack");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+
+require("dotenv").config({ path: "./.env.development" });
 
 module.exports = {
   entry: "./src/index.js",
@@ -53,6 +56,9 @@ module.exports = {
         "./feeListFunc": "./src/bootstrap",
       },
       shared: ["react", "react-dom"],
+    }),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
     }),
   ],
 };

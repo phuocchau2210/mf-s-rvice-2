@@ -1,7 +1,7 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
-const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/index.js",
@@ -10,9 +10,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.m?js$/,
         exclude: /node_modules/,
-        use: ["babel-loader"],
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        },
       },
       {
         test: /\.css$/,
@@ -36,10 +41,10 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    // new HtmlWebpackPlugin({
-    //   title: "React",
-    //   template: "./public/index.html",
-    // }),
+    new HtmlWebpackPlugin({
+      title: "React",
+      template: "./public/index.html",
+    }),
     new ModuleFederationPlugin({
       name: "service2",
       filename: "remoteEntry.js",
